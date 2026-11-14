@@ -1,7 +1,7 @@
 {
   "version": 1,
   "network": "tex",
-  "updated_at": "2026-11-14T20:17:01Z",
+  "updated_at": "2026-11-14T21:26:12Z",
   "sticky_leader_id": "28b6f40ea607e6aa26cc9fc26092c34a6bd7f72e2ee74093ec29cd4e09daf476",
   "core": [
     {
@@ -45,6 +45,11 @@
       "id": "2b24fcfbeb8efed47cb0ee527f7d8c607bb678885ffb7d1e8e6c800fa91ddba0",
       "peer": "192.168.50.234:19005",
       "name": "v5"
+    },
+    {
+      "id": "7428bbacd171bfd3fb377d8148d0b6cf3cb433248b64e63dd0202739a5c0f044",
+      "peer": "192.168.255.355:19005",
+      "name": "alice-v7"
     }
   ],
   "notes": [
