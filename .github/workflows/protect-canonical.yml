@@ -1,0 +1,65 @@
+# Fail joiner PRs that touch the canonical allowlist files.
+# Operators update those files via publish-branch (direct push to main), not PRs.
+name: Protect canonical allowlist
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  protect:
+    name: canonical-files-readonly
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Reject edits to network-allowlist.json / core-validators.json
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          echo "Diff ${BASE_SHA}...${HEAD_SHA}"
+          mapfile -t changed < <(git diff --name-only "$BASE_SHA"..."$HEAD_SHA" || true)
+          if [[ ${#changed[@]} -eq 0 ]]; then
+            echo "No file changes."
+            exit 0
+          fi
+          echo "Changed files:"
+          printf '  %s\n' "${changed[@]}"
+
+          blocked=0
+          for f in "${changed[@]}"; do
+            case "$f" in
+              network-allowlist.json|core-validators.json)
+                echo "::error file=$f::Joiners must not edit $f. Open a PR that only adds join-requests/<name>.json"
+                blocked=1
+                ;;
+            esac
+          done
+
+          # Soft guidance: prefer only join-requests/*.json in joiner PRs
+          for f in "${changed[@]}"; do
+            case "$f" in
+              join-requests/*|README.md|.github/*) ;;
+              network-allowlist.json|core-validators.json) ;;
+              *)
+                echo "::warning file=$f::Unexpected path in join PR — preferred layout is join-requests/<name>.json only"
+                ;;
+            esac
+          done
+
+          if [[ "$blocked" -ne 0 ]]; then
+            echo
+            echo "Blocked: canonical allowlist JSON is operator-only."
+            echo "Submit: join-requests/<your-name>.json with {id, peer, name}"
+            exit 1
+          fi
+          echo "OK — canonical JSON untouched."

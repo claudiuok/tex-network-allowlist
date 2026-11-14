@@ -1,0 +1,8 @@
+# Canonical allowlist — operators only (requires review from these owners on PRs).
+# Joiners should only add files under join-requests/.
+/network-allowlist.json @fortzADA
+/core-validators.json @fortzADA
+
+# CI / protection rules
+/.github/ @fortzADA
+/CODEOWNERS @fortzADA

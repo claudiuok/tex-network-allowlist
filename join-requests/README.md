@@ -15,7 +15,7 @@ New validators **do not** edit `network-allowlist.json`.
 }
 ```
 
-3. Open a PR. Do **not** modify `network-allowlist.json` or `core-validators.json`.
+3. Open a PR. Do **not** modify `network-allowlist.json` or `core-validators.json` — GitHub Actions **fails** any PR that touches those two files.
 4. After an operator admits you, pull the published allowlist and start your node (`tex-allowlist.sh apply --from …`).
 
 Rules:

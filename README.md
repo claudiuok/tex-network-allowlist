@@ -7,10 +7,11 @@ Public trusted validator set: Ed25519 pubkeys + gossip `host:port` only. **No se
 | `network-allowlist.json` | Full voting set + `core` bootstrap | **Operators only** |
 | `core-validators.json` | Dial targets for remotes | **Operators only** |
 | `join-requests/*.json` | Single-validator join blobs | Joiners (via PR) |
+| `CODEOWNERS` + CI | Blocks PR edits to the two JSON files | Operators |
 
 ## Joiners — submit a single blob
 
-Do **not** edit `network-allowlist.json`. Open a PR that only adds:
+Do **not** edit `network-allowlist.json` or `core-validators.json` (CI will fail the PR). Open a PR that only adds:
 
 `join-requests/<your-name>.json`
 
